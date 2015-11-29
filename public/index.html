@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Web Chat Server</title>
+	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
+	<link href="/styles/bootstrap.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/scripts/jquery.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="header">
+			<div class="logo">
+				<img src="/images/logo.png" alt="logo image" width="300" height="200" />
+			</div>
+			<div class="signIn">
+			<form name="signin" action="#">
+				<div class="form-group">
+				    <label for="inputEmail3" class="col-sm-2 control-label center-block algnEmailPwd">Email</label>
+				    <div class="col-sm-10">
+				      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+				    </div>
+				  </div>
+				  <div class="form-group ">
+				    <label for="inputPassword3" class="col-sm-2 control-label center-block algnEmailPwd">Password</label>
+				    <div class="col-sm-10">
+				      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <button type="submit" class="btn btn-default btn-primary algnEmailPwd">Sign in</button>
+				    </div>
+				  </div>
+			</form>
+			</div>
+		</div>
+		<div class="signUp">
+			<h1> Create Live Chat Account </h1>
+			<form name="signUp" action="testUser" method="post">
+				<div class="form-group">
+					<label for="username">User Name</label>
+    				<input type="text" class="form-control" id="username" name="username" placeholder="User Name">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail1">Email address</label>
+    				<input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Email">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputPassword1">Password</label>
+				    <input type="password" class="form-control" id="exampleInputPassword1" name="pwd" placeholder="Password">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputPassword1">Retype Password</label>
+				    <input type="password" class="form-control" id="exampleInputPassword1" name="repwd" placeholder="Password">
+				</div>
+				<div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <button type="submit" class="btn btn-default btn-primary signInbtn">Sign in</button>
+				    </div>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
