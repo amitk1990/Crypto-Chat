@@ -13,17 +13,17 @@
 				<img src="/images/logo.png" alt="logo image" width="300" height="200" />
 			</div>
 			<div class="signIn">
-			<form name="signin" action="#">
+			<form name="signin" action="ValidateUser" method="">
 				<div class="form-group">
-				    <label for="inputEmail3" class="col-sm-2 control-label center-block algnEmailPwd">Email</label>
+				    <label for="inputEmail3" class="col-sm-2 control-label center-block algnEmailPwd">UserName</label>
 				    <div class="col-sm-10">
-				      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+				      <input type="email" class="form-control" id="inputEmail3" name="username" placeholder="Username">
 				    </div>
 				  </div>
 				  <div class="form-group ">
 				    <label for="inputPassword3" class="col-sm-2 control-label center-block algnEmailPwd">Password</label>
 				    <div class="col-sm-10">
-				      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+				      <input type="password" class="form-control" id="inputPassword3" name="password" placeholder="Password">
 				    </div>
 				  </div>
 				  <div class="form-group">
@@ -36,7 +36,7 @@
 		</div>
 		<div class="signUp">
 			<h1> Create Live Chat Account </h1>
-			<form name="signUp" action="testUser" method="post">
+			<form name="signUp" action="ChatApplication" method="post">
 				<div class="form-group">
 					<label for="username">User Name</label>
     				<input type="text" class="form-control" id="username" name="username" placeholder="User Name">

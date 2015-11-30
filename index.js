@@ -3,12 +3,17 @@ var express 	= require('express'),
     server  	= require('http').createServer(app),
     io      	= require('socket.io').listen(server),
     port    	= 8080,
-    bodyParser = require('body-parser');
+    bodyParser  = require('body-parser'),
+    util 		= require('util'),
+    moduleIO 	= require('./lib/moduleIO.js');
 
     // hash object to save clients data,
     // { socketid: { clientid, nickname }, socketid: { ... } }
     chatClients = new Object();
-
+// Creating a new JSON Data structure to store user Info into file
+var userInfo = {
+    	userData: []
+	};
 // listening to port...
 server.listen(port);
 
@@ -30,16 +35,39 @@ app.get('/', function (req, res) {
 });
 
 // creating a new live chat account sign up form  
-app.post('/testUser', function (req, res) {
-	var username = req.body.username
-	var email = req.body.email;
-	var pwd = req.body.pwd;
-	var repwd = req.body.repwd;
-	console.log(username+' '+' '+email+' '+pwd+' '+repwd);
+app.post('/ChatApplication', function (req, res) {
+	var username = req.body.username;	// username 
+	var email = req.body.email;		// email	
+	var pwd = req.body.pwd;			// password
+	var repwd = req.body.repwd;		// recheck password
+	console.log("NEW USER CHECK"+username+' '+' '+email+' '+pwd+' '+repwd);	
 	if(pwd.length == repwd.length && pwd === repwd){
-		console.log('password match --> create account');
-		res.sendFile(__dirname + '/public/index.html');
+								
+								// TODO : Convert password into a HASH Value using SALT
+		
+		userInfo = moduleIO.readFromFile();
+		console.dir(userInfo);
+		var listOfUsers = moduleIO.getListOfUsers();
+		if(!moduleIO.checkUserNameExists(listOfUsers,username)){
+				var userDetails = {'username': username, 'pwd':pwd};	//  use ModuleIO to store userName and Hash Password into JSON FILE
+				userInfo.userData.push(userDetails);
+				console.dir(userInfo);
+				moduleIO.writeToFile(userInfo);
+				console.log('password match --> create account');
+				res.sendFile(__dirname + '/public/chatApp.html');
+		}else{
+			res.sendFile(__dirname+'/public/index.html')
+				// duplicate User Exists
+		}
+
 	}else{
-		res.sendFile(__dirname+'/public/index.html?attempt1=failed')
+		res.sendFile(__dirname+'/public/index.html')
 	}	
+});
+
+app.post('/ValidateUser',function(req,res)){
+	var username = req.body.username;
+	var pwd = req.body.password;
+	var listOfUsers = moduleIO.getListOfUsers();
+	//var listOfPasswords = moduleIO.getListOfPwds();
 });

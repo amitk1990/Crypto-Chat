@@ -19,8 +19,10 @@
     "body-parser": "^1.14.1",
     "bootstrap": "^3.3.6",
     "express": "^4.10.2",
+    "jsonfile": "^2.2.3",
     "path": "^0.12.7",
-    "socket.io": "*"
+    "socket.io": "*",
+    "underscore": "^1.8.3"
   },
   "homepage": "https://github.com/amitk1990/Crypto-Chat"
 }
