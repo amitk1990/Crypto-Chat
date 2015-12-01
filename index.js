@@ -5,7 +5,11 @@ var express 	= require('express'),
     port    	= 8080,
     bodyParser  = require('body-parser'),
     util 		= require('util'),
+    session 	= require('client-sessions');
     moduleIO 	= require('./lib/moduleIO.js');
+
+
+var username;
 
     // hash object to save clients data,
     // { socketid: { clientid, nickname }, socketid: { ... } }
@@ -27,6 +31,14 @@ app.use("/images", express.static(__dirname + '/public/images'));
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+// support use of session config
+app.use(session({
+  cookieName: 'session',
+  secret: 'eg[isfd-8yF9-7w2315df{}+Ijsli;;to8',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+}));
+
 // serving the main applicaion file (index.html)
 // when a client makes a request to the app root
 // (http://localhost:8080/)
@@ -36,7 +48,7 @@ app.get('/', function (req, res) {
 
 // creating a new live chat account sign up form  
 app.post('/ChatApplication', function (req, res) {
-	var username = req.body.username;	// username 
+	username = req.body.username;	// username 
 	var email = req.body.email;		// email	
 	var pwd = req.body.pwd;			// password
 	var repwd = req.body.repwd;		// recheck password
@@ -49,12 +61,14 @@ app.post('/ChatApplication', function (req, res) {
 		console.dir(userInfo);
 		var listOfUsers = moduleIO.getListOfUsers();
 		if(!moduleIO.checkUserNameExists(listOfUsers,username)){
+				req.session.user = username; // set user with username
 				var userDetails = {'username': username, 'pwd':pwd};	//  use ModuleIO to store userName and Hash Password into JSON FILE
 				userInfo.userData.push(userDetails);
 				console.dir(userInfo);
 				moduleIO.writeToFile(userInfo);
 				console.log('password match --> create account');
 				res.sendFile(__dirname + '/public/chatApp.html');
+
 		}else{
 			res.sendFile(__dirname+'/public/index.html')
 				// duplicate User Exists
@@ -65,9 +79,30 @@ app.post('/ChatApplication', function (req, res) {
 	}	
 });
 
-app.post('/ValidateUser',function(req,res)){
-	var username = req.body.username;
+app.post('/ValidateUser',function(req,res){
+	username = req.body.username;
 	var pwd = req.body.password;
-	var listOfUsers = moduleIO.getListOfUsers();
-	//var listOfPasswords = moduleIO.getListOfPwds();
+	if(moduleIO.validUserCheck(username,pwd)){
+		console.log("REGISTERED USER");
+		res.sendFile(__dirname+'/public/chatApp.html');
+		req.session.user = username; // set user with username
+	}else{
+		res.sendFile(__dirname+'/public/index.html');
+	}
 });
+
+//--------------SOCKET IO CHAT APPLICATION -- SERVER -----------------
+io.on('connection',function(socket){
+	console.log("User is connected");
+	socket.emit('loginUsername',username);
+	socket.on('chat message',function(data,user){
+		console.log('message'+data);
+		socket.broadcast.emit('chatMessageBroadcast',data,user);
+	});
+
+	socket.on('disconnect', function(){
+    	console.log('user disconnected');
+  	});
+});
+
+

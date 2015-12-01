@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Web Chat Server Application</title>
+	<meta charset="UTF-8">
+	<title>Web Chat Server Application Using Socket</title>
 	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
 	<link href="/styles/bootstrap.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="/scripts/jquery.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/scripts/clientJS.js"></script>
 </head>
 <body>
 	<div class="container">
-		<div class="header">
+		<div class="header heightAlign">
 			<div class="logo">
-				<img src="/images/logo.png" alt="logo image" width="300" height="200" />
+				<img src="/images/logo.png" alt="logo image" width="200" height="100" />
 			</div>
 			<div class="logoutContainer">
 				<a href="/logout"> Logout </a>
 			</div>
+		</div>
+		<div class="messageContainer">
+		</div>
+		<div class="userlist">
+			<ul id="users">
+				<li class="userChat"><div></div> <strong> Harshini </strong></li>
+			</ul>
+		</div>
+		<div class="chatContainer">
+			<ul id="messages"></ul>
+	    	<form action="">
+	      		<input  type="text" id="messageBox" autocomplete="off" value="" /><button class="btn btn-success">Send</button>
+	    	</form>
+	    	<input type="hidden" value="" name="username" class="username" />
 		</div>
 	</div>
 </body>
