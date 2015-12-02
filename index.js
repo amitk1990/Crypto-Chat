@@ -3,6 +3,7 @@ var express 	= require('express'),
     server  	= require('http').createServer(app),
     io      	= require('socket.io').listen(server),
     port    	= 8080,
+    _           = require('underscore'),
     bodyParser  = require('body-parser'),
     util 		= require('util'),
     session 	= require('client-sessions');
@@ -10,6 +11,7 @@ var express 	= require('express'),
 
 
 var username;
+var activeUsers = [];
 
     // hash object to save clients data,
     // { socketid: { clientid, nickname }, socketid: { ... } }
@@ -94,13 +96,21 @@ app.post('/ValidateUser',function(req,res){
 //--------------SOCKET IO CHAT APPLICATION -- SERVER -----------------
 io.on('connection',function(socket){
 	console.log("User is connected");
+	if (username !=null) {
+		activeUsers.push(username);
+	}
 	socket.emit('loginUsername',username);
+	console.log(_.uniq(activeUsers));
+	activeUsers = _.uniq(activeUsers);
+	io.emit('loginUsernameSent',activeUsers);
 	socket.on('chat message',function(data,user){
 		console.log('message'+data);
 		socket.broadcast.emit('chatMessageBroadcast',data,user);
 	});
 
 	socket.on('disconnect', function(){
+		activeUsers = _.without(activeUsers,username);
+		io.emit('loginUsernameSent',activeUsers);
     	console.log('user disconnected');
   	});
 });
