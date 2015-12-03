@@ -107,7 +107,11 @@ io.on('connection',function(socket){
 		console.log('message'+data);
 		socket.broadcast.emit('chatMessageBroadcast',data,user);
 	});
-
+	// GEOLOCATION OF SOCKET
+	socket.on('geolocation',function(user,latlon){
+		console.log(latlon);
+		io.emit('geolocationUser',user,latlon);
+	});
 	socket.on('disconnect', function(){
 		activeUsers = _.without(activeUsers,username);
 		io.emit('loginUsernameSent',activeUsers);

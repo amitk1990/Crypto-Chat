@@ -5,9 +5,12 @@
 	<title>Web Chat Server Application Using Socket</title>
 	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
 	<link href="/styles/bootstrap.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/emojify.js/1.0.1/emojify.min.css" />
 	<script type="text/javascript" src="/scripts/jquery.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/scripts/clientJS.js"></script>
+	<script src="/scripts/emojify.js"></script>	
+	<script src="http://maps.googleapis.com/maps/api/js"></script>
 </head>
 <body>
 	<div class="container">
@@ -28,10 +31,18 @@
 		<div class="chatContainer">
 			<ul id="messages"></ul>
 	    	<form action="">
-	      		<input  type="text" id="messageBox" autocomplete="off" value="" /><button class="btn btn-success">Send</button>
+	      		<input  type="text" id="messageBox" autocomplete="off" value="" placeholder="Type a message" />
+	      		<button class="btn btn-success">Send</button>
+	      		<button id="location" class="btn btn-primary"> Send location</button>
 	    	</form>
 	    	<input type="hidden" value="" name="username" class="username" />
 		</div>
 	</div>
 </body>
+<script>
+$(document).ready(function(){
+	  emojify.setConfig({emojify_tag_type:'div',img_dir:'images/basic'});
+      emojify.run(document.getElementById('messageBox'));
+ });
+</script>
 </html>
