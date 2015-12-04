@@ -120,7 +120,7 @@ table {
 	overflow-y: auto; 
 }
 .chatContainer form { background: #000; padding: 3px; position: fixed; top: 86%; width: 70%;float: left; }
-.chatContainer form input { border: 0; padding: 10px; width: 77%; margin-right: .5%; color: #000; }
+.chatContainer form input { border: 0; padding: 10px; width: 72%; margin-right: .5%; color: #000; }
 .chatContainer form button { width: 9%;  border: none; padding: 10px; }
 .chatContainer #messages { list-style-type: none; margin: 0; padding: 0; }
 .chatContainer #messages li { padding: 5px 10px; height: 30px; text-align: center; }
@@ -189,4 +189,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c9de96', end
 	width: 50px;
 	height: 20px;
 	float: right;
+}
+#sendFile{
+	width: 5%;
+
+}
+.hide{
+	display: none;
 }

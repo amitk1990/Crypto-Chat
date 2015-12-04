@@ -37,7 +37,7 @@ $(document).ready(function(){
 		var decrypted   = CryptoJS.AES.decrypt(recMessage, secret);
 		var recvMessage = decrypted.toString(CryptoJS.enc.Utf8);
 		console.log("decrypted"+decrypted.toString(CryptoJS.enc.Utf8));
-
+		
 					// DATA Integrity supported by using Hash - SHA 256
 		var hash = CryptoJS.HmacSHA256(recvMessage, "Secret Passphrase");
 			hash = hash.toString();
@@ -51,7 +51,7 @@ $(document).ready(function(){
 		
 	});
 	// CHAT BOX ACTIVE USERS
-	socket.on('loginUsernameSent',function(useractive,secretkey){
+	socket.on('loginUsernameSent',function(useractive){
 		$('#users').empty('userChat');
 		for(var i=0;i< useractive.length;i++){
 			$('#users').append('<li class="userChat"><div class="green"></div><strong>'+useractive[i]+'</strong></li>');
@@ -59,7 +59,14 @@ $(document).ready(function(){
 	});
 	
 
-
+	// // FILE Upload
+	// $('#sendFile').on('click',function(){
+	// 	$( "#fileToUpload" ).trigger( "click" );
+	// 	$('#fileToUpload').on('change',function(){
+	// 		var pathOfFile = $('#fileToUpload').val();
+	// 		console.log(pathOfFile);
+	// 	});
+	// });
 
 
 
@@ -70,7 +77,7 @@ $(document).ready(function(){
 	// Socket geolocatoion from server   
 	  socket.on('geolocationUser',function(user,latlon){
  			var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
-	  		$('#messages').append('<li class="locationSent"><strong>'+user+'</strong> <img src='+img_url+' alt="googleMap"></li>');
+	  		$('#messages').append('<li class="locationSent"><strong class="pull-left">'+user+'</strong> <img src='+img_url+' alt="googleMap"></li>');
 	 		$(".chatContainer").scrollTop($(".chatContainer")[0].scrollHeight); // Scroll down the message box 
 	  });
 

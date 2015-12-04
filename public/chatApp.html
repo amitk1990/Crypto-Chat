@@ -34,6 +34,8 @@
 	      		<input  type="text" id="messageBox" autocomplete="off" value="" placeholder="Type a message" />
 	      		<button class="btn btn-success">Send</button>
 	      		<button id="location" class="btn btn-primary"> Send location</button>
+	      		<button id="sendFile" class="bn btn-danger">File</button>
+	      		<input type="file" name="fileToUpload" id="fileToUpload" class="hide">
 	    	</form>
 	    	<input type="hidden" value="" name="username" class="username" />
 		</div>
@@ -41,9 +43,16 @@
 </body>
 <script>
 $(document).ready(function(){
-	  emojify.setConfig({emojify_tag_type:'div',img_dir:'images/basic'});
-      emojify.run(document.getElementById('messageBox'));
+		  emojify.setConfig({emojify_tag_type:'div',img_dir:'images/basic'});
+	      emojify.run(document.getElementById('messageBox'));
  });
+
+// $(document).bind("contextmenu",function(e) {
+// 	console.log('hello');
+//      e.preventDefault();
+// });
+
+
 </script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/hmac-sha256.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>

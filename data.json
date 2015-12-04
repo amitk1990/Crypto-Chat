@@ -1,80 +1,28 @@
 {
   "userData": [
     {
-      "username": "amit",
-      "pwd": "123"
-    },
-    {
-      "username": "kaus",
-      "pwd": "123"
-    },
-    {
-      "username": "raj",
-      "pwd": "123"
-    },
-    {
-      "username": "var",
-      "pwd": "123"
-    },
-    {
-      "username": "arar",
-      "pwd": "123"
-    },
-    {
-      "username": "kushil",
-      "pwd": "123"
-    },
-    {
-      "username": "madhu",
-      "pwd": "123"
-    },
-    {
-      "username": "harshu",
-      "pwd": "123"
-    },
-    {
-      "username": "sa",
-      "pwd": "123"
-    },
-    {
-      "username": "karma",
-      "pwd": "123"
-    },
-    {
-      "username": "nyu",
-      "pwd": "456"
-    },
-    {
-      "username": "vishal",
-      "pwd": "123"
-    },
-    {
-      "username": "jandu",
-      "pwd": "123"
+      "username": "test1",
+      "pwd": "890"
     },
     {
       "username": "amit",
-      "pwd": "123"
+      "pwd": "$2a$10$awoPAFSTft1Od2Ynm.JObeHoyfiLioUlYazz.LykmIPKMeP2sr13e"
+    },
+    {
+      "username": "hari",
+      "pwd": "$2a$10$ohNeEqsfKZWcintG43QHDOANTMnENq2mX.4s8PPAxc.H2Y3QCRH76"
     },
     {
       "username": "harshini",
-      "pwd": "123"
+      "pwd": "$2a$10$fTicSz0lt6/zx.Kh7Sgz7uqH0unAG91wFjGW.jmb4fGaPzuLv499K"
     },
     {
-      "username": "harsha",
-      "pwd": "123"
+      "username": "hvk",
+      "pwd": "$2a$10$LRVGXFRKW6kWf32u6YaJe.Vbax48UjBoi9.7TgxXmXOPlo3hwXB4O"
     },
     {
-      "username": "monish",
-      "pwd": "123"
-    },
-    {
-      "username": "testaccount",
-      "pwd": ""
-    },
-    {
-      "username": "testaccount1",
-      "pwd": "123"
+      "username": "madhu",
+      "pwd": "$2a$10$nzLitvaIdzWwm4Y04A723eFcuZXxdmRKfFrnnvNZwJQLXJ/740fcq"
     }
   ]
 }

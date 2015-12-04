@@ -16,6 +16,8 @@
     "url": "https://github.com/amitk1990/Crypto-Chat/issues"
   },
   "dependencies": {
+    "bcrypt": "^0.8.5",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.14.1",
     "bootstrap": "^3.3.6",
     "client-sessions": "^0.7.0",

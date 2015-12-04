@@ -6,7 +6,8 @@ var express 	= require('express'),
     _           = require('underscore'),
     bodyParser  = require('body-parser'),
     util 		= require('util'),
-    session 	= require('client-sessions');
+    session 	= require('client-sessions'),
+    bcrypt 		= require('bcrypt'),
     moduleIO 	= require('./lib/moduleIO.js');
 
 
@@ -57,14 +58,18 @@ app.post('/ChatApplication', function (req, res) {
 	console.log("NEW USER CHECK"+username+' '+' '+email+' '+pwd+' '+repwd);	
 	if(pwd.length == repwd.length && pwd === repwd){
 								
-								// TODO : Convert password into a HASH Value using SALT
-		
+		// SALT N PEPPER -- CRYPTO
+		var salt = bcrypt.genSaltSync(10);
+		var	saltPep = pwd.concat(username);
+			console.log(saltPep);
+		var pwdHash = bcrypt.hashSync(saltPep, salt);
+		// console.log("hash password"+pwdHash);
 		userInfo = moduleIO.readFromFile();
 		console.dir(userInfo);
 		var listOfUsers = moduleIO.getListOfUsers();
 		if(!moduleIO.checkUserNameExists(listOfUsers,username)){
 				req.session.user = username; // set user with username
-				var userDetails = {'username': username, 'pwd':pwd};	//  use ModuleIO to store userName and Hash Password into JSON FILE
+				var userDetails = {'username': username, 'pwd':pwdHash};	//  use ModuleIO to store userName and Hash Password into JSON FILE
 				userInfo.userData.push(userDetails);
 				console.dir(userInfo);
 				moduleIO.writeToFile(userInfo);
