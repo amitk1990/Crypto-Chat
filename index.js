@@ -80,7 +80,7 @@ app.post('/ChatApplication', function (req, res) {
 		res.sendFile(__dirname+'/public/index.html')
 	}	
 });
-
+// Enter Chat Application 
 app.post('/ValidateUser',function(req,res){
 	username = req.body.username;
 	var pwd = req.body.password;
@@ -88,9 +88,20 @@ app.post('/ValidateUser',function(req,res){
 		console.log("REGISTERED USER");
 		res.sendFile(__dirname+'/public/chatApp.html');
 		req.session.user = username; // set user with username
+		console.log("Session Data"+req.session.user);
 	}else{
 		res.sendFile(__dirname+'/public/index.html');
 	}
+});
+
+// logout
+app.get('/logout',function(req,res){
+	req.session.reset();
+	res.redirect('/');
+});
+app.get('/ValidateUser',function(req,res){
+	req.session.reset();
+	res.redirect('/');
 });
 
 //--------------SOCKET IO CHAT APPLICATION -- SERVER -----------------
@@ -103,9 +114,9 @@ io.on('connection',function(socket){
 	console.log(_.uniq(activeUsers));
 	activeUsers = _.uniq(activeUsers);
 	io.emit('loginUsernameSent',activeUsers);
-	socket.on('chat message',function(data,user){
-		console.log('message'+data);
-		socket.broadcast.emit('chatMessageBroadcast',data,user);
+	socket.on('chat message',function(data,user,hashval){
+		console.dir(hashval);
+		socket.broadcast.emit('chatMessageBroadcast',data,user,hashval);
 	});
 	// GEOLOCATION OF SOCKET
 	socket.on('geolocation',function(user,latlon){

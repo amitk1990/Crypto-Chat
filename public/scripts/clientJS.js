@@ -9,8 +9,17 @@ $(document).ready(function(){
 		if(message.length == 0){
 			return false
 		}
+		// ENCRYPT THE MESSAGE  - AES ALGORITHM 
+		var secret = "amitharshini123";
+		var encrypted = '' + CryptoJS.AES.encrypt(message, secret);
+		console.log(encrypted);
+    	//DATA Integrity supported by using Hash - SHA 256
+    	var hash = CryptoJS.HmacSHA256(message, "Secret Passphrase");
+    		hash = hash.toString();
+	    console.log(hash.toString());
+
 		$('#messages').append('<li class="messageRight"><strong>'+user+' : </strong>'+message+'</li>');
-		socket.emit('chat message',message,user);
+		socket.emit('chat message',encrypted,user,hash);
 		$('#messageBox').val('');
 		return false;
 	});
@@ -21,12 +30,28 @@ $(document).ready(function(){
 		user = username;
 	});
 	// MESSAGE BROADCAST TO ALL USERS
-	socket.on('chatMessageBroadcast',function(message,fromUser){
-		console.log(" i am here ");
-		$('#messages').append('<li class="messageSent"><strong>'+fromUser+' : </strong>'+message+'</li>');
+	socket.on('chatMessageBroadcast',function(recMessage,fromUser,hashRcv){
+
+					// DECRYPT THE MESSAGE  - AES ALGORITHM 
+		var secret = "amitharshini123";
+		var decrypted   = CryptoJS.AES.decrypt(recMessage, secret);
+		var recvMessage = decrypted.toString(CryptoJS.enc.Utf8);
+		console.log("decrypted"+decrypted.toString(CryptoJS.enc.Utf8));
+
+					// DATA Integrity supported by using Hash - SHA 256
+		var hash = CryptoJS.HmacSHA256(recvMessage, "Secret Passphrase");
+			hash = hash.toString();
+		
+		if(hash.length == hashRcv.length && hash === hashRcv){
+			console.log(" Secure DATA INTEGRITY ");
+			$('#messages').append('<li class="messageSent"><strong>'+fromUser+' : </strong>'+recvMessage+'</li>');	
+		}else{
+			console.log("error in DATA INTEGRITY");
+		}	
+		
 	});
 	// CHAT BOX ACTIVE USERS
-	socket.on('loginUsernameSent',function(useractive){
+	socket.on('loginUsernameSent',function(useractive,secretkey){
 		$('#users').empty('userChat');
 		for(var i=0;i< useractive.length;i++){
 			$('#users').append('<li class="userChat"><div class="green"></div><strong>'+useractive[i]+'</strong></li>');
