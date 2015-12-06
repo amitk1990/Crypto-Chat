@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:8080');
+var socket = io.connect('https://localhost:5000');
 var user;
 $(document).ready(function(){
 	// SUBMIT A CHAT MESSAGE
@@ -107,7 +107,7 @@ $(document).ready(function(){
       });
 	// Socket geolocatoion from server   
 	  socket.on('geolocationUser',function(user,latlon){
- 			var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
+ 			var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
 	  		$('#messages').append('<li class="locationSent"><strong class="pull-left">'+user+'</strong> <img src='+img_url+' alt="googleMap"></li>');
 	 		$(".chatContainer").scrollTop($(".chatContainer")[0].scrollHeight); // Scroll down the message box 
 	  });

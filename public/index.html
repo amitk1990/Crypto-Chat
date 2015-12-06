@@ -66,7 +66,7 @@
 	</div>
 </body>
 <script type="text/javascript">
-var socket = io.connect('http://localhost:8080');
+var socket = io.connect('https://localhost:8080');
 $(window).on('load',function(){
 	socket.emit('sendToken');
 	socket.on('tokenSent',function(token){
