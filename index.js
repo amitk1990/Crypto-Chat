@@ -3,23 +3,19 @@ var express 	= require('express'),
 	app			= express(),
     server  	= require('http').createServer(app),
     io      	= require('socket.io').listen(server),
-    port    	= 8080,
+    port    	= process.env.PORT || 8080,
     _           = require('underscore'),
     bodyParser  = require('body-parser'),
     util 		= require('util'),
     session 	= require('client-sessions'),
     bcrypt 		= require('bcrypt'),
     multer 		= require('multer'),
+    randtoken 	= require('rand-token'),
     moduleIO 	= require('./lib/moduleIO.js');
 
 
-var username;
+var username,token=0;
 var activeUsers = [];
-
-
-// var uploading = multer({
-//   dest: __dirname + '../public/uploads/',
-// })
 
     // hash object to save clients data,
     // { socketid: { clientid, nickname }, socketid: { ... } }
@@ -47,14 +43,15 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(session({
   cookieName: 'session',
   secret: 'eg[isfd-8yF9-7w2315df{}+Ijsli;;to8',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
+  duration: 2 * 60 * 60 * 1000,	// 2hr session
 }));
 
 // serving the main applicaion file (index.html)
 // when a client makes a request to the app root
 // (http://localhost:8080/)
 app.get('/', function (req, res) {
+	token = randtoken.generate(26);
+	console.log(token);
 	res.sendFile(__dirname + '/public/index.html');
 });
 
@@ -64,7 +61,8 @@ app.post('/ChatApplication', function (req, res) {
 	var email = req.body.email;		// email	
 	var pwd = req.body.pwd;			// password
 	var repwd = req.body.repwd;		// recheck password
-	console.log("NEW USER CHECK"+username+' '+' '+email+' '+pwd+' '+repwd);	
+	var clientToken = req.body.token;
+	console.log("NEW USER CHECK"+username+' '+' '+email+' '+pwd+' '+repwd+' '+token);	
 	if(pwd.length == repwd.length && pwd === repwd){
 								
 		// SALT N PEPPER -- CRYPTO
@@ -96,8 +94,12 @@ app.post('/ChatApplication', function (req, res) {
 });
 // Enter Chat Application 
 app.post('/ValidateUser',function(req,res){
+	console.log(req.session.user);
+	console.log(req.body.username);
 	username = req.body.username;
 	var pwd = req.body.password;
+	var clientToken = req.body.token;
+	console.log(clientToken);
 	if(moduleIO.validUserCheck(username,pwd)){
 		console.log("REGISTERED USER");
 		res.sendFile(__dirname+'/public/chatApp.html');
@@ -115,7 +117,12 @@ app.get('/logout',function(req,res){
 });
 var path,filename;
 app.get('/ValidateUser',function(req,res){	
-	res.redirect('/logout');
+	if(req.session.user){
+		res.sendFile(__dirname+'/public/chatApp.html');
+	}else{
+		res.redirect('/logout');
+	}
+	
 });
 
 
@@ -175,6 +182,8 @@ app.get('/uploads/image-*',function(req,res){
 });
 
 //--------------SOCKET IO CHAT APPLICATION -- SERVER -----------------
+
+
 io.on('connection',function(socket){
 	console.log("User is connected");
 	if (username !=null) {
@@ -196,6 +205,10 @@ io.on('connection',function(socket){
 	//FILE SOCKET 
 	socket.on('sendFileToAllUsers',function(data){
 		socket.broadcast.emit('fileSendAttached',data);
+	});
+	// SEND TOKEN
+	socket.on('sendToken',function(){
+		socket.emit('tokenSent',token);
 	});
 	// DISCONNECT
 	socket.on('disconnect', function(){

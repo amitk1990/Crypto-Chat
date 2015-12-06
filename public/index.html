@@ -4,6 +4,7 @@
 	<title>Web Chat Server</title>
 	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
 	<link href="/styles/bootstrap.css" rel="stylesheet" type="text/css" />
+	<script src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/scripts/jquery.js"></script>
 </head>
 <body>
@@ -26,6 +27,7 @@
 				      <input type="password" class="form-control" id="inputPassword3" name="password" placeholder="Password" autocomplete="off">
 				    </div>
 				  </div>
+				  <input type="text" name="token" class="hide" id="tokenHiddenLogin" value="" />
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <button type="submit" class="btn btn-default btn-primary algnEmailPwd">Sign in</button>
@@ -53,6 +55,7 @@
 					<label for="exampleInputPassword1">Retype Password</label>
 				    <input type="password" class="form-control" id="exampleInputPassword1" name="repwd" placeholder="Password" autocomplete="off">
 				</div>
+				<input type="text" name="token" class="hide" id="tokenHiddenSignup" value="" />
 				<div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <button type="submit" class="btn btn-default btn-primary signInbtn">Sign in</button>
@@ -63,6 +66,14 @@
 	</div>
 </body>
 <script type="text/javascript">
+var socket = io.connect('http://localhost:8080');
+$(window).on('load',function(){
+	socket.emit('sendToken');
+	socket.on('tokenSent',function(token){
+		console.log(token);
+		$('#tokenHiddenSignup,#tokenHiddenLogin').val(token);
+	});
+});
 $(document).bind("contextmenu",function(e) {
 	console.log('hello');
      e.preventDefault();

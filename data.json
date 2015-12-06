@@ -27,6 +27,10 @@
     {
       "username": "abr",
       "pwd": "$2a$10$lTNtQ5uLEvzaSgZScDzCyuozuqUlgYtannEuX/uc2/13bWUzsXjJe"
+    },
+    {
+      "username": "abrar",
+      "pwd": "$2a$10$PErm17RllD.ZQmzEKvg1kO7ijj1lZUKClxE7O5qkjy6J6hyPSL9Q."
     }
   ]
 }

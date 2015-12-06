@@ -1,11 +1,10 @@
-var socket = io.connect('http://localhost:8080');;
+var socket = io.connect('http://localhost:8080');
 var user;
 $(document).ready(function(){
 	// SUBMIT A CHAT MESSAGE
 	$('.chatContainer form').on('submit',function(){
 		$(".chatContainer").scrollTop($(".chatContainer")[0].scrollHeight); // Scroll down the message box 
 		var message = $('#messageBox').val();
-		// console.log(message);
 		if(message.length == 0){
 			return false
 		}
@@ -70,6 +69,9 @@ $(document).ready(function(){
 	});
 
 	$('#uploadForm').on('submit',function() {
+		if(user == undefined){
+      		window.location="/logout";
+	  	}
 	 	var formData = new FormData($(this)[0]);
 	 	var fileObj = [];
 	    $.ajax({
@@ -97,7 +99,11 @@ $(document).ready(function(){
 
 	// MAPS Display
 	  $('#location').on('click',function(){
+	  	if(user != undefined){
       		getLocation();
+	  	}else{
+	  		window.location="/logout";
+	  	}
       });
 	// Socket geolocatoion from server   
 	  socket.on('geolocationUser',function(user,latlon){
