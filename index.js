@@ -10,7 +10,6 @@ var express 	= require('express'),
     session 	= require('client-sessions'),
     bcrypt 		= require('bcrypt'),
     multer 		= require('multer'),
-    pictures    = require('./lib/pictures.js'),
     moduleIO 	= require('./lib/moduleIO.js');
 
 
