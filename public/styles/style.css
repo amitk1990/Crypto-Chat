@@ -197,3 +197,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c9de96', end
 .hide{
 	display: none;
 }
+#uploadForm{
+	width: 5%;
+	float: right;
+	left: 78%;
+	float: right;
+	height: 47px;
+}
+#uploadForm input {
+	color: #fff;
+	font-size: 11px;
+	width: 100%;
+	text-align: center;
+	height: 39px;
+}
+.download{
+	width: auto;
+	color: #000;
+	text-decoration: underline;
+	cursor: pointer;
+	display: inline-block;
+	text-align: center !important;
+	margin-left: 20px;
+}

@@ -1,4 +1,5 @@
 var express 	= require('express'),
+	router 		= express.Router(),
 	app			= express(),
     server  	= require('http').createServer(app),
     io      	= require('socket.io').listen(server),
@@ -8,11 +9,18 @@ var express 	= require('express'),
     util 		= require('util'),
     session 	= require('client-sessions'),
     bcrypt 		= require('bcrypt'),
+    multer 		= require('multer'),
+    pictures    = require('./lib/pictures.js'),
     moduleIO 	= require('./lib/moduleIO.js');
 
 
 var username;
 var activeUsers = [];
+
+
+// var uploading = multer({
+//   dest: __dirname + '../public/uploads/',
+// })
 
     // hash object to save clients data,
     // { socketid: { clientid, nickname }, socketid: { ... } }
@@ -30,6 +38,8 @@ server.listen(port);
 app.use("/styles", express.static(__dirname + '/public/styles'));
 app.use("/scripts", express.static(__dirname + '/public/scripts'));
 app.use("/images", express.static(__dirname + '/public/images'));
+//app.use('/uploads',pictures);
+
 // body parser config
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -104,9 +114,65 @@ app.get('/logout',function(req,res){
 	req.session.reset();
 	res.redirect('/');
 });
-app.get('/ValidateUser',function(req,res){
-	req.session.reset();
-	res.redirect('/');
+var path,filename;
+app.get('/ValidateUser',function(req,res){	
+	res.redirect('/logout');
+});
+
+
+//------------------------- FILE UPLOAD--------------------------
+/*				FILE FORMAT JSON	*/
+// uploads
+// { fieldname: 'image',
+//   originalname: 'hello.js',
+//   encoding: '7bit',
+//   mimetype: 'application/javascript',
+//   destination: 'uploads/',
+//   filename: 'image-1449343600222',
+//   path: 'uploads/image-1449343600222',
+//   size: 239 }
+
+//var upload = multer({dest:'uploads/'})
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+ 
+var upload = multer({ storage: storage })
+var cpUpload = upload.single('image')
+var filePath;
+app.post('/uploads', cpUpload, function(req,res){
+	if(req.session.user){
+		console.log('uploads');
+		console.log(req.file.path);
+		console.log(req.file.filename);
+		path 	 = req.file.path;
+		filename = req.file.filename;
+		var response = {
+    		status  : 200,
+    		success : 'Updated Successfully'
+		}
+		req.session.fileSend = true;
+		filePath =req.file.path;
+		console.log(filePath);
+		var fileObj = { 'path': filePath , 'filename' : req.file.filename,'username':req.session.user };
+  		res.send(fileObj);
+	}else{
+		res.redirect('/logout');
+	}
+});
+
+app.get('/uploads/image-*',function(req,res){
+	if(req.session.user){
+		res.sendFile(__dirname+'/'+filePath);
+	}else{
+		res.redirect('/logout');
+	}
 });
 
 //--------------SOCKET IO CHAT APPLICATION -- SERVER -----------------
@@ -128,9 +194,14 @@ io.on('connection',function(socket){
 		console.log(latlon);
 		io.emit('geolocationUser',user,latlon);
 	});
+	//FILE SOCKET 
+	socket.on('sendFileToAllUsers',function(data){
+		socket.broadcast.emit('fileSendAttached',data);
+	});
+	// DISCONNECT
 	socket.on('disconnect', function(){
 		activeUsers = _.without(activeUsers,username);
-		io.emit('loginUsernameSent',activeUsers);
+		socket.broadcast.emit('loginUsernameSent',activeUsers);
     	console.log('user disconnected');
   	});
 });

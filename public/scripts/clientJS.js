@@ -59,16 +59,41 @@ $(document).ready(function(){
 	});
 	
 
-	// // FILE Upload
-	// $('#sendFile').on('click',function(){
-	// 	$( "#fileToUpload" ).trigger( "click" );
-	// 	$('#fileToUpload').on('change',function(){
-	// 		var pathOfFile = $('#fileToUpload').val();
-	// 		console.log(pathOfFile);
-	// 	});
-	// });
+	// FILE Upload
+	document.getElementById("fileToUpload").onchange = function() {
+	$('#uploadForm').trigger('submit');
+	};
 
+	$(document).on('click','.download',function(e){
+		console.log('clicked');
+		window.location.pathname = $(this).data('download');
+	});
 
+	$('#uploadForm').on('submit',function() {
+	 	var formData = new FormData($(this)[0]);
+	 	var fileObj = [];
+	    $.ajax({
+	        url:'uploads',
+	        type: 'POST',
+	        data: formData,
+	        async: false,
+	        success: function (data) {
+	            //alert(data);
+	            console.log(data);
+	            fileObj = data;
+	            $('#messages').append('<li class="messageSent"><strong>'+fileObj['username']+'</strong><p class="download" data-download="'+fileObj['path']+'">Attachment </p></li>');
+	        	socket.emit('sendFileToAllUsers',fileObj);
+	        },
+	        cache: false,
+	        contentType: false,
+	        processData: false
+	    });
+	    return false;
+		});
+	// SOCKET FILE - RECEIVED
+	socket.on('fileSendAttached',function(fileObj){
+			            $('#messages').append('<li class="messageSent"><strong>'+fileObj['username']+'</strong><p class="download" data-download="'+fileObj['path']+'">Attachment </p></li>');	
+	});
 
 	// MAPS Display
 	  $('#location').on('click',function(){

@@ -34,9 +34,13 @@
 	      		<input  type="text" id="messageBox" autocomplete="off" value="" placeholder="Type a message" />
 	      		<button class="btn btn-success">Send</button>
 	      		<button id="location" class="btn btn-primary"> Send location</button>
-	      		<button id="sendFile" class="bn btn-danger">File</button>
-	      		<input type="file" name="fileToUpload" id="fileToUpload" class="hide">
+	<!--       		<button id="sendFile" class="bn btn-danger">File</button> -->
+	<!--       		<input type="file" name="fileToUpload" id="fileToUpload" class="hide"> -->
 	    	</form>
+	    	<form action="uploads" method="post" enctype="multipart/form-data" id="uploadForm">
+	    		<input type="file" name="image" id="fileToUpload" class="btn btn-danger" id="triggerFile" />
+  				<!-- <input type="submit" value="Upload" class="btn btn-danger" id="triggerFile" /> -->
+			</form>
 	    	<input type="hidden" value="" name="username" class="username" />
 		</div>
 	</div>

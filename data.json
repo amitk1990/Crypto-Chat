@@ -23,6 +23,10 @@
     {
       "username": "madhu",
       "pwd": "$2a$10$nzLitvaIdzWwm4Y04A723eFcuZXxdmRKfFrnnvNZwJQLXJ/740fcq"
+    },
+    {
+      "username": "abr",
+      "pwd": "$2a$10$lTNtQ5uLEvzaSgZScDzCyuozuqUlgYtannEuX/uc2/13bWUzsXjJe"
     }
   ]
 }
