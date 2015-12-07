@@ -27,38 +27,6 @@
     {
       "username": "abr",
       "pwd": "$2a$10$lTNtQ5uLEvzaSgZScDzCyuozuqUlgYtannEuX/uc2/13bWUzsXjJe"
-    },
-    {
-      "username": "test",
-      "pwd": "$2a$10$wOwAh6Ak86E3/Rg01Z3PCO74ryJhSX1A7jXoPGsH26SddZmZ7gjVm"
-    },
-    {
-      "username": "wat",
-      "pwd": "$2a$10$EHqBS0BpHhUW.TRGFB4EW.83h0BtVNgCdYfETfVlEH6Jbl6TrcSeK"
-    },
-    {
-      "username": "ak47",
-      "pwd": "$2a$10$helXLMwLrVzWri5MUQ9QXOk/vh9GViA0eucx2Wz9rPijMzUlYTawy"
-    },
-    {
-      "username": "w123",
-      "pwd": "$2a$10$EnCJtBjDJaw/BocK4BUc8.jc0qo88JPOVtAdJKhpp5HIZF0Jup522"
-    },
-    {
-      "username": "w1",
-      "pwd": "$2a$10$.dtxs98QG4le.rX1A0s.CuaPyMICgeuQZE1ntiAVjP5IsYburBShq"
-    },
-    {
-      "username": "wer",
-      "pwd": "$2a$10$lL4C5Nc9Hf4.MvBQLOni1Onf3e9XQ8RQDB9f.dVG8i3h2lhAb0jAm"
-    },
-    {
-      "username": "yh123",
-      "pwd": "$2a$10$Lt1z60I2LMIAfhBhOeFIl.SARqxoTSPKLTLtjaOotYxRBohIskFZO"
-    },
-    {
-      "username": "kar",
-      "pwd": "$2a$10$G9v/5zDuTPZMuGnlw6ztsOn.FepGU68tATn7R2oobffysLfWSOqM2"
     }
   ]
 }
