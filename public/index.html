@@ -2,9 +2,10 @@
 <html>
 <head>
 	<title>Web Chat Server</title>
+	<script src="/socket.io/socket.io.js"></script>
 	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
 	<link href="/styles/bootstrap.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="/scripts/jquery.js"></script>
+	<script type="text/javascript" src="/scripts/jquery.js"></script>	
 </head>
 <body>
 	<div class="container">
@@ -26,6 +27,7 @@
 				      <input type="password" class="form-control" id="inputPassword3" name="password" placeholder="Password" autocomplete="off">
 				    </div>
 				  </div>
+				  <input type="text" name="token" class="hide hiddentoken"  value="a">
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <button type="submit" class="btn btn-default btn-primary algnEmailPwd">Sign in</button>
@@ -47,12 +49,13 @@
 				</div>
 				<div class="form-group">
 					<label for="exampleInputPassword1">Password</label>
-				    <input type="password" class="form-control" id="exampleInputPassword1" name="pwd" placeholder="Password" autocomplete="off">
+				    <input type="password" class="form-control encrptpwd" id="exampleInputPassword1" name="pwd" placeholder="Password" autocomplete="off">
 				</div>
 				<div class="form-group">
 					<label for="exampleInputPassword1">Retype Password</label>
-				    <input type="password" class="form-control" id="exampleInputPassword1" name="repwd" placeholder="Password" autocomplete="off">
+				    <input type="password" class="form-control encrptpwd" id="exampleInputPassword1" name="repwd" placeholder="Password" autocomplete="off">
 				</div>
+				<input type="text" name="token" class="hide hiddentoken" value="a" id="abc" />
 				<div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <button type="submit" class="btn btn-default btn-primary signInbtn">Sign in</button>
@@ -63,9 +66,18 @@
 	</div>
 </body>
 <script type="text/javascript">
-$(document).bind("contextmenu",function(e) {
-	console.log('hello');
-     e.preventDefault();
+// $(document).bind("contextmenu",function(e) {
+// 	console.log('hello');
+//      e.preventDefault();
+// });
+var socket = io.connect('http://localhost:8080/');
+$(document).ready(function(){
+	
+	socket.emit('sendToken',"hello");
+	socket.on('serverClienttoken',function(data){
+		console.log($('.hiddentoken').val())
+			$('.hiddentoken').val(data.toString());
+		});
 });
 </script>
 </html>

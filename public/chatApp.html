@@ -19,6 +19,7 @@
 				<img src="/images/logo.png" alt="logo image" width="200" height="100" />
 			</div>
 			<div class="logoutContainer">
+				<input type="text" class="hide" id="userName" />
 				<a href="/logout"> Logout </a>
 			</div>
 		</div>
@@ -30,16 +31,17 @@
 		</div>
 		<div class="chatContainer">
 			<ul id="messages"></ul>
-	    	<form action="">
+	    	<form action="" class="chatwindow">
 	      		<input  type="text" id="messageBox" autocomplete="off" value="" placeholder="Type a message" />
 	      		<button class="btn btn-success">Send</button>
 	      		<button id="location" class="btn btn-primary"> Send location</button>
 	<!--       		<button id="sendFile" class="bn btn-danger">File</button> -->
 	<!--       		<input type="file" name="fileToUpload" id="fileToUpload" class="hide"> -->
+				<button class="btn btn-danger uploadBTN" id="uploadFileBtn" > upload </button>
 	    	</form>
-	    	<form action="uploads" method="post" enctype="multipart/form-data" id="uploadForm">
+
+	    	<form action="uploads" method="post" enctype="multipart/form-data" id="uploadForm" class="hide">
 	    		<input type="file" name="image" id="fileToUpload" class="btn btn-danger" id="triggerFile" />
-  				<!-- <input type="submit" value="Upload" class="btn btn-danger" id="triggerFile" /> -->
 			</form>
 	    	<input type="hidden" value="" name="username" class="username" />
 		</div>
@@ -50,13 +52,6 @@ $(document).ready(function(){
 		  emojify.setConfig({emojify_tag_type:'div',img_dir:'images/basic'});
 	      emojify.run(document.getElementById('messageBox'));
  });
-
-// $(document).bind("contextmenu",function(e) {
-// 	console.log('hello');
-//      e.preventDefault();
-// });
-
-
 </script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/hmac-sha256.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>

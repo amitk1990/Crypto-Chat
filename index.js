@@ -9,18 +9,15 @@ var express 	= require('express'),
     util 		= require('util'),
     session 	= require('client-sessions'),
     bcrypt 		= require('bcrypt'),
+    randtoken   = require('rand-token'),
     multer 		= require('multer'),
-    pictures    = require('./lib/pictures.js'),
     moduleIO 	= require('./lib/moduleIO.js');
 
 
 var username;
 var activeUsers = [];
 
-
-// var uploading = multer({
-//   dest: __dirname + '../public/uploads/',
-// })
+var token;
 
     // hash object to save clients data,
     // { socketid: { clientid, nickname }, socketid: { ... } }
@@ -65,6 +62,12 @@ app.post('/ChatApplication', function (req, res) {
 	var email = req.body.email;		// email	
 	var pwd = req.body.pwd;			// password
 	var repwd = req.body.repwd;		// recheck password
+	var tokenUser = req.body.token;
+	console.log(tokenUser+'TOKEN CHECK'+token);
+	console.log(tokenUser === token);
+	if(tokenUser != token){
+		res.redirect('/logout');
+	} 		
 	console.log("NEW USER CHECK"+username+' '+' '+email+' '+pwd+' '+repwd);	
 	if(pwd.length == repwd.length && pwd === repwd){
 								
@@ -85,6 +88,8 @@ app.post('/ChatApplication', function (req, res) {
 				moduleIO.writeToFile(userInfo);
 				console.log('password match --> create account');
 				res.sendFile(__dirname + '/public/chatApp.html');
+				req.session.user = username;
+				res.cookie('name',username);  
 
 		}else{
 			res.sendFile(__dirname+'/public/index.html')
@@ -99,11 +104,17 @@ app.post('/ChatApplication', function (req, res) {
 app.post('/ValidateUser',function(req,res){
 	username = req.body.username;
 	var pwd = req.body.password;
+	var tokenUser = req.body.token;
+	console.log(tokenUser+'TOKEN CHECK'+token);
+	if(tokenUser != token){
+		res.redirect('/logout');
+	} 
 	if(moduleIO.validUserCheck(username,pwd)){
 		console.log("REGISTERED USER");
 		res.sendFile(__dirname+'/public/chatApp.html');
 		req.session.user = username; // set user with username
 		console.log("Session Data"+req.session.user);
+		res.cookie('name',username);
 	}else{
 		res.sendFile(__dirname+'/public/index.html');
 	}
@@ -112,10 +123,14 @@ app.post('/ValidateUser',function(req,res){
 // logout
 app.get('/logout',function(req,res){
 	req.session.reset();
+	activeUsers = _.without(activeUsers,username);
 	res.redirect('/');
 });
 var path,filename;
 app.get('/ValidateUser',function(req,res){	
+	res.redirect('/logout');
+});
+app.get('/ChatApplication',function(req,res){	
 	res.redirect('/logout');
 });
 
@@ -160,13 +175,16 @@ app.post('/uploads', cpUpload, function(req,res){
 		req.session.fileSend = true;
 		filePath =req.file.path;
 		console.log(filePath);
+		console.log(req.session.user);
 		var fileObj = { 'path': filePath , 'filename' : req.file.filename,'username':req.session.user };
   		res.send(fileObj);
 	}else{
 		res.redirect('/logout');
 	}
 });
-
+app.get('/uploads',function(req,res){
+	res.redirect('/logout');
+});
 app.get('/uploads/image-*',function(req,res){
 	if(req.session.user){
 		res.sendFile(__dirname+'/'+filePath);
@@ -178,30 +196,43 @@ app.get('/uploads/image-*',function(req,res){
 //--------------SOCKET IO CHAT APPLICATION -- SERVER -----------------
 io.on('connection',function(socket){
 	console.log("User is connected");
-	if (username !=null) {
-		activeUsers.push(username);
-	}
-	socket.emit('loginUsername',username);
-	console.log(_.uniq(activeUsers));
-	activeUsers = _.uniq(activeUsers);
-	io.emit('loginUsernameSent',activeUsers);
+
+	socket.on('sendverifiedUser',function(user){
+		if (user !=null) {
+			activeUsers.push(user);
+		}
+		//socket.emit('loginUsername',username); //
+		console.log("active users"+_.uniq(activeUsers));
+		activeUsers = _.uniq(activeUsers);
+		io.emit('loginUsernameSent',activeUsers);
+	});
 	socket.on('chat message',function(data,user,hashval){
 		console.dir(hashval);
 		socket.broadcast.emit('chatMessageBroadcast',data,user,hashval);
+		io.emit('loginUsernameSent',activeUsers);
 	});
 	// GEOLOCATION OF SOCKET
 	socket.on('geolocation',function(user,latlon){
 		console.log(latlon);
 		io.emit('geolocationUser',user,latlon);
+		io.emit('loginUsernameSent',activeUsers)
 	});
 	//FILE SOCKET 
 	socket.on('sendFileToAllUsers',function(data){
 		socket.broadcast.emit('fileSendAttached',data);
+		io.emit('loginUsernameSent',activeUsers)
+	});
+	// TOKEN 
+	socket.on('sendToken',function(data){
+		console.log(data);
+		token = randtoken.generate(16);
+		console.log(token);
+		socket.emit('serverClienttoken',token);
 	});
 	// DISCONNECT
 	socket.on('disconnect', function(){
-		activeUsers = _.without(activeUsers,username);
-		socket.broadcast.emit('loginUsernameSent',activeUsers);
+		// activeUsers = _.without(activeUsers,username);
+		// socket.broadcast.emit('loginUsernameSent',activeUsers);
     	console.log('user disconnected');
   	});
 });

@@ -1,5 +1,40 @@
-var socket = io.connect('http://localhost:8080');;
+var socket = io.connect('http://localhost:8080');
 var user;
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+} 
+$(window).on('load',function(){
+	//Get cookie routine by Shelley Powers 
+function get_cookie(Name) {
+  var search = Name + "="
+  var returnvalue = "";
+  if (document.cookie.length > 0) {
+    offset = document.cookie.indexOf(search)
+    // if cookie exists
+    if (offset != -1) { 
+      offset += search.length
+      // set index of beginning of value
+      end = document.cookie.indexOf(";", offset);
+      // set index of end of cookie value
+      if (end == -1) end = document.cookie.length;
+      returnvalue=unescape(document.cookie.substring(offset, end))
+      }
+   }
+  return returnvalue;
+ }
+ user = get_cookie('name');
+ $('#userName').val(user);
+ console.log(user);
+ socket.emit('sendverifiedUser',$('#userName').val());
+});
+
 $(document).ready(function(){
 	// SUBMIT A CHAT MESSAGE
 	$('.chatContainer form').on('submit',function(){
@@ -17,18 +52,18 @@ $(document).ready(function(){
     	var hash = CryptoJS.HmacSHA256(message, "Secret Passphrase");
     		hash = hash.toString();
 	    console.log(hash.toString());
-
+	    user = $('#userName').val();
 		$('#messages').append('<li class="messageRight"><strong>'+user+' : </strong>'+message+'</li>');
 		socket.emit('chat message',encrypted,user,hash);
 		$('#messageBox').val('');
 		return false;
 	});
 	// WELCOME TO CHAT ROOM 
-	socket.on('loginUsername',function(username){
-		$('#messages').append('<li><span>Welcome to the Live Account Chatroom <strong>'+username.toUpperCase()+'</strong> You have joined the room !! </span></li>');
-		$('.username').val(username);
-		user = username;
-	});
+	// socket.on('loginUsername',function(username){
+	// 	$('#messages').append('<li><span>Welcome to the Live Account Chatroom <strong>'+username.toUpperCase()+'</strong> You have joined the room !! </span></li>');
+	// 	$('.username').val(username);
+	// 	//user = username;
+	// });
 	// MESSAGE BROADCAST TO ALL USERS
 	socket.on('chatMessageBroadcast',function(recMessage,fromUser,hashRcv){
 
@@ -60,6 +95,9 @@ $(document).ready(function(){
 	
 
 	// FILE Upload
+	$('#uploadFileBtn').on('click',function(){
+		$('#fileToUpload').trigger('click');
+	});
 	document.getElementById("fileToUpload").onchange = function() {
 	$('#uploadForm').trigger('submit');
 	};
